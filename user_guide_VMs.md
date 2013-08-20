@@ -10,7 +10,7 @@ For a more complete documentation see also:
 *Please note that from this point forward, we assume that you have an active account on the
 cloud, with EC2 credentials and environment variables properly configured.
 If you are having problems setting them up please follow [this link](link/to/guide "Setup the environment.") 
-or contact your system adminsitrator.*
+or contact your system administrator.*
 
 1. "euca-describe-images" List the VM images available.
 -------------------------------------------------------
