@@ -10,7 +10,7 @@ For a more complete documentation see also:
 *Please note that from this point forward, we assume that you have an active account on the
 cloud, with EC2 credentials and environment variables properly configured.
 If you are having problems setting them up please follow [this link](link/to/guide "Setup the environment.") 
-or contact your system adminsitrator.*
+or contact your system administrator.*
 
 1. "euca-describe-images" List the VM images available.
 -------------------------------------------------------
@@ -27,7 +27,7 @@ in order to run the chosen image.
 
 2. "euca-run-instances" Run your VM from available images list.
 ---------------------------------------------------------------
-In order to be able to launch instances you have to choose flavor and eventaully specify a contextualization script.
+In order to be able to launch instances you have to choose flavor and eventually specify a contextualization script.
 
 *   Usually three flavors are available: *m1.small, m1.medium and m1.large*. According with your quota limits you can choose the flavor you prefer.
     Each template has different specification about the resources your VM will have.
