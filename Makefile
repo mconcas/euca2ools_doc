@@ -15,7 +15,8 @@ PANDOC_OPTS_INDEX := -s -S -f markdown -H css/github.css
 
 INPUT_MDS := \
 	user_guide_VMs.md \
-	user_guide_elastic_IP.md 
+	user_guide_elastic_IP.md \
+	admin_guide.md
 
 
 INDEX_MD := index.md
