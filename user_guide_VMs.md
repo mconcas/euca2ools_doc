@@ -12,8 +12,19 @@ cloud, with EC2 credentials and environment variables properly configured.
 If you are having problems setting them up please follow [this link](link/to/guide "Setup the environment.") 
 or contact your system administrator.*
 
+"euca-create-keypairs"
+----------------------
+
+In order to access by ssh you can create a keypair. Note that this command require a -f \<keyfile_name.pem\> and a name that is to be specified during the VM's creation (see below how to run an istance).
+
+    euca-create-keypairs -f <keyfile_name.pem> keyfile_name
+
+"euca-describe-keypairs"
+------------------------
+ This lists all the pair you have created.
+
 "euca-describe-images" List the VM images available.
--------------------------------------------------------
+----------------------------------------------------
  Example:
 
     [user@one-master]$ euca-describe-images
@@ -26,7 +37,7 @@ in order to run the chosen image.
 *Tip: The Euca2ools don't use OpenNebula's identification codes, even they are similar.*
 
 "euca-run-instances" Run your VM from available images list.
----------------------------------------------------------------
+------------------------------------------------------------
 In order to be able to launch instances you have to choose flavor and eventually specify a contextualization script.
 
 *   Usually three flavors are available: *m1.small, m1.medium and m1.large*. According with your quota limits you can choose the flavor you prefer.
@@ -43,7 +54,7 @@ In order to be able to launch instances you have to choose flavor and eventually
 
 The command may result, for example:
 
-    [user@one-master ~]$ euca-run-instances ami-xxxxxxxx -f path/to/<userdata_file> -t m1.small
+    [user@one-master ~]$ euca-run-instances ami-xxxxxxxx -k keypair_name -f path/to/<userdata_file> -t m1.small
 
 See also: "man euca-run-instances" for more explanations.
 

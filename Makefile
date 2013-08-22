@@ -36,8 +36,11 @@ html: idx $(OUTPUT_HTML)
 
 idx:
 	@echo Generating HTML index...
-	@(echo "Main Menu" > $(INDEX_MD) ; \
+	@(echo "Main menu" > $(INDEX_MD) ; \
 	  echo "=========" >> $(INDEX_MD) ; \
+	  echo "Essential instruction set to manage and use a private cloud using custom ruby/bash scripts and euca2ools for the management." >> $(INDEX_MD) ; \
+	  echo "" >> $(INDEX_MD) ; \
+	  echo "---------------------------------------------------------------------------------------------------------------------------" >> $(INDEX_MD) ; \
 	  echo "" >> $(INDEX_MD) ; \
 	  for Md in $(INPUT_MDS) ; do \
 	    echo "1. [$$(head -n1 $$Md)]($${Md%.*}.html)" ; \
