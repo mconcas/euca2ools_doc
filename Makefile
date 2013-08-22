@@ -14,9 +14,13 @@ PANDOC_OPTS := -s -S --toc --chapters --number-sections -f markdown -H css/githu
 PANDOC_OPTS_INDEX := -s -S -f markdown -H css/github.css
 
 INPUT_MDS := \
+    admin_guide.md \
+    user_guide_cloud_enter.md \
 	user_guide_VMs.md \
-	user_guide_elastic_IP.md \
-	admin_guide.md
+	user_guide_elastic_IP.md 
+	
+	
+
 
 
 INDEX_MD := index.md

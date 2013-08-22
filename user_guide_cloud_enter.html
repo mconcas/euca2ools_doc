@@ -310,18 +310,26 @@
 <body>
 <div id="TOC">
 <ul>
-<li><a href="#euca2ools-how-to---admins-reference"><span class="toc-section-number">3</span> Euca2ools’ how to - Admin’s reference</a><ul>
-<li><a href="#create-a-new-user"><span class="toc-section-number">3.1</span> Create a new user</a></li>
+<li><a href="#euca2ools-how-to---cloud-enter.sh"><span class="toc-section-number">2</span> Euca2ools’ how to - Cloud-enter.sh</a><ul>
+<li><a href="#how-to-use-cloud-enter.sh-on-to01xl.to.infn.it-aka-zoroastro.to.infn.it"><span class="toc-section-number">2.1</span> How to use “cloud-enter.sh” on to01xl.to.infn.it, aka zoroastro.to.infn.it</a></li>
 </ul></li>
 </ul>
 </div>
-<h1 id="euca2ools-how-to---admins-reference"><a href="#euca2ools-how-to---admins-reference"><span class="header-section-number">3</span> Euca2ools’ how to - Admin’s reference</a></h1>
-<p>The purpose of this “how to” is to give the basic tools for managing your cloud using the a small set of custom scripts and the Euca2ools, an open source implementation of EC2 Amazon’s tools.</p>
-<p>For a more complete documentation see also:</p>
+<h1 id="euca2ools-how-to---cloud-enter.sh"><a href="#euca2ools-how-to---cloud-enter.sh"><span class="header-section-number">2</span> Euca2ools’ how to - Cloud-enter.sh</a></h1>
+<p>The purpose of this “how to” is to give the basic tools for managing your own set of virtual machines. For a more complete documentation see also:</p>
 <ul>
 <li><a href="http://www.eucalyptus.com/docs/eucalyptus/3.3/console-guide/" title="Eucaliptus User Guide">This Guide</a></li>
 <li><a href="https://aws.amazon.com/ec2/faqs/" title="Amazon EC2 FAQ">These FAQs</a></li>
 </ul>
-<h2 id="create-a-new-user"><a href="#create-a-new-user"><span class="header-section-number">3.1</span> Create a new user</a></h2>
+<p><em>Please note that from this point forward, we assume that you have an active account on the cloud, with EC2 credentials and environment variables properly configured. If you are having problems setting them up please follow <a href="link/to/guide" title="Setup the environment.">this link</a> or contact your system administrator.</em></p>
+<h2 id="how-to-use-cloud-enter.sh-on-to01xl.to.infn.it-aka-zoroastro.to.infn.it"><a href="#how-to-use-cloud-enter.sh-on-to01xl.to.infn.it-aka-zoroastro.to.infn.it"><span class="header-section-number">2.1</span> How to use “cloud-enter.sh” on to01xl.to.infn.it, aka zoroastro.to.infn.it</a></h2>
+<p><a href="cloud-enter.sh">Get</a> a copy of the <em>cloud-enter.sh</em> script and give it the execution permission. Then execute it with:</p>
+<pre><code>to01xl.to.infn.it&gt; ./cloud-enter
+Your username: user
+Your password:
+Commands start with euca-*, use [Tab] to complete.
+Type exit to return to your normal shell.
+user@cloud-infnto &gt;</code></pre>
+<p>From this prompt you can run <em>euca-commands</em>. Enjoy…</p>
 </body>
 </html>

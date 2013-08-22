@@ -310,7 +310,13 @@
 <body>
 <div id="TOC">
 <ul>
-<li><a href="#euca2ools-how-to---elastic-ip-configuration"><span class="toc-section-number">2</span> Euca2ools’ how to - Elastic IP configuration</a></li>
+<li><a href="#euca2ools-how-to---elastic-ip-configuration"><span class="toc-section-number">2</span> Euca2ools’ how to - Elastic IP configuration</a><ul>
+<li><a href="#euca-allocate-addresses"><span class="toc-section-number">2.1</span> “euca-allocate-addresses”</a></li>
+<li><a href="#euca-describe-addresses"><span class="toc-section-number">2.2</span> “euca-describe-addresses”</a></li>
+<li><a href="#euca-associate-addresses"><span class="toc-section-number">2.3</span> “euca-associate-addresses”</a></li>
+<li><a href="#euca-disassociate-addresses"><span class="toc-section-number">2.4</span> “euca-disassociate-addresses”</a></li>
+<li><a href="#euca-release-addresses"><span class="toc-section-number">2.5</span> “euca-release-addresses”</a></li>
+</ul></li>
 </ul>
 </div>
 <h1 id="euca2ools-how-to---elastic-ip-configuration"><a href="#euca2ools-how-to---elastic-ip-configuration"><span class="header-section-number">2</span> Euca2ools’ how to - Elastic IP configuration</a></h1>
@@ -319,6 +325,35 @@
 <li><a href="http://www.eucalyptus.com/docs/eucalyptus/3.3/console-guide/" title="Eucaliptus User Guide">This Guide</a></li>
 <li><a href="https://aws.amazon.com/ec2/faqs/" title="Amazon EC2 FAQ">These FAQs</a></li>
 </ul>
-<p><em>Please note that from this point forward, we assume that you have an active account on the cloud, with EC2 credentials and environment variables properly configured. If you are having problems setting them up please follow <a href="link/to/guide" title="Setup the environment.">this link</a> or contact your system adminsitrator.</em></p>
+<p><em>Please note that from this point forward, we assume that you have an active account on the cloud, with EC2 credentials and environment variables properly configured. If you are having problems setting them up please follow <a href="link/to/guide" title="Setup the environment.">this link</a> or contact your system adminsitrator. In this chapter we also assume that you are quite familiar with the “elastic IP” concept, at least for associating private VMs’ IP addresses to public IP addresses (so reachable from the internet), provided by your cloud service.</em></p>
+<h2 id="euca-allocate-addresses"><a href="#euca-allocate-addresses"><span class="header-section-number">2.1</span> “euca-allocate-addresses”</a></h2>
+<p>In order to access a specific elastic IP (from now: eIP), the public one that you are intended to use to access your VM, the first step is <em>to allocate</em> one. Example:</p>
+<pre><code>[user@one-master ~]$ euca-allocate-address
+ADDRESS 193.205.66.212</code></pre>
+<p>Please note that:</p>
+<ul>
+<li>Restricted to the opennebula cloud infrastructure @Turin you have only one IP address to associate.</li>
+<li>One cannot choose which address will be allocated. OpenNebula will return one of your “allocable” addresses.</li>
+<li>If all the available eIPs are allocated, the <em>euca-allocate-address</em> command will fall in timeout.</li>
+</ul>
+<h2 id="euca-describe-addresses"><a href="#euca-describe-addresses"><span class="header-section-number">2.2</span> “euca-describe-addresses”</a></h2>
+<p>According with your permissions, this command lists all your <em>allocated</em> addresses. Note that if nothing is returned, you wouldn’t be able to associate any eIP.</p>
+<h2 id="euca-associate-addresses"><a href="#euca-associate-addresses"><span class="header-section-number">2.3</span> “euca-associate-addresses”</a></h2>
+<p>Syntax is like:</p>
+<pre><code>[user@one-master ~]$ euca-associate-address -i &lt;instance_id&gt; &lt;eIP_address&gt;</code></pre>
+<p>Please note:</p>
+<ul>
+<li>You can associate an address only whether it was previously allocated. Done that you should be able to connect through <em>ssh</em> to your node using the eIP as address if it is configured to do that.</li>
+<li>Recalling this command changing the &lt;instance_id&gt; will automatically associate that instance with the same eIP address, disabling the previously set configuration.</li>
+<li>This procedure can be repeated as many times as you want.</li>
+</ul>
+<h2 id="euca-disassociate-addresses"><a href="#euca-disassociate-addresses"><span class="header-section-number">2.4</span> “euca-disassociate-addresses”</a></h2>
+<p>You can disassociate whenever you want your VM’s instance from the eIP just specifying which one. E.g:</p>
+<pre><code>[user@one-master ~]$ euca-disassociate-address 193.205.66.212
+ADDRESS 193.205.66.212</code></pre>
+<h2 id="euca-release-addresses"><a href="#euca-release-addresses"><span class="header-section-number">2.5</span> “euca-release-addresses”</a></h2>
+<p>To release an eIP use:</p>
+<pre><code>[user@one-master ~]$ euca-release-address 193.205.66.212
+ADDRESS 193.205.66.212</code></pre>
 </body>
 </html>
