@@ -1,7 +1,9 @@
 Euca2ools' how to - Admin's reference
 =====================================
 
-The purpose of this "how to" is to give the basic tools for managing your cloud using the a small set of custom scripts and the Euca2ools, an open source implementation of EC2 Amazon's tools.
+The purpose of this "how to" is to give the basic tools for managing
+your cloud using the a small set of custom scripts and the Euca2ools,
+an open source implementation of EC2 Amazon's tools.
 
 For a more complete documentation see also:
 
@@ -11,10 +13,16 @@ For a more complete documentation see also:
 Create a new user with the onevrouter-create.rb script
 ------------------------------------------------------
 
-The script requires three mandatory parameters and one optional parameter.
-The basic idea is to assign a VRouter for each virtual private network assigned at every user.
-During the execution this script may produce (choosing the default --no-commit option) four templates, one for the quota management, one for the virtual router, one for a private network (where user machines will be connected), and the last for a public network.
-It has only one public (elastic) IP visible from the user side. The task automatically accomplished by the euca2ools is to map the unique public IP belonging to this VNet to a private VM's IP belonging to a private VNet.
+The script requires three mandatory parameters and one optional
+parameter. The basic idea is to assign a VRouter for each virtual
+private network assigned at every user. During the execution this
+script may produce (choosing the default --no-commit option) four
+templates, one for the quota management, one for the virtual router,
+one for a private network (where user machines will be connected), and
+the last for a public network. It has only one public (elastic) IP
+visible from the user side. The task automatically accomplished by the
+euca2ools is to map the unique public IP belonging to this VNet to a
+private VM's IP belonging to a private VNet.
 
 See how to use it below:
 
@@ -31,9 +39,9 @@ See how to use it below:
 
     Is this OK? Type "yes, it is": yes, it is
 
-In this way you create only the four templates, confirm typing literally *yes, it is*
-Please note that them will be created in the *present working directory*.
-The routine proceeds like this:
+In this way you create only the four templates, confirm typing
+literally *yes, it is* Please note that them will be created in the
+*present working directory*. The routine proceeds like this:
 
     Generating template clouduser.onequota...ok
     Generating template clouduser-VRouter.onevm...ok
@@ -61,8 +69,10 @@ See your templates here in this form:
     -rw-rw-r-- 1 oneadmin oneadmin 2199 22 ago 17:52 clouduser-VRouter.onevm
     [oneadmin@one-master ~]$
 
-If you are pleased with the work and believe it, you can directly commit the changes to OpenNebula that will automatically create everything is necessary for this configuration.
-Please, note that no templates will be written after this procedure.
+If you are pleased with the work and believe it, you can directly
+commit the changes to OpenNebula that will automatically create
+everything is necessary for this configuration. Please, note that no
+templates will be written after this procedure.
 
 For example:
 
@@ -99,5 +109,3 @@ For example:
     Creating public network clouduser-Prv...ok (vnet ID: 106)
     Creating ACLs...ok (acl ID: 127)
     Instantiating VM clouduser-VRouter...ok (VM ID: 3383)
-
-
