@@ -31,7 +31,7 @@ all: html
 html: idx $(OUTPUT_HTML)
 
 idx:
-	@echo Generating HTML index...
+	@echo Generating HTML: index...
 	@(echo "Using the Cloud @ INFN Torino" > $(INDEX_MD) ; \
 	  echo "=============================" >> $(INDEX_MD) ; \
       echo "" >> $(INDEX_MD) ; \
