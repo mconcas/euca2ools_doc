@@ -16,12 +16,8 @@ PANDOC_OPTS_INDEX := -s -S -f markdown -H css/github.css
 INPUT_MDS := \
     admin_guide.md \
     user_guide_cloud_enter.md \
-	user_guide_VMs.md \
-	user_guide_elastic_IP.md 
-	
-	
-
-
+    user_guide_VMs.md \
+    user_guide_elastic_IP.md 
 
 INDEX_MD := index.md
 INDEX_HTML := index.html
@@ -36,11 +32,12 @@ html: idx $(OUTPUT_HTML)
 
 idx:
 	@echo Generating HTML index...
-	@(echo "Main menu" > $(INDEX_MD) ; \
-	  echo "=========" >> $(INDEX_MD) ; \
-	  echo "Essential instruction set to manage and use a private cloud using custom ruby/bash scripts and euca2ools for the management." >> $(INDEX_MD) ; \
+	@(echo "Using the Cloud @ INFN Torino" > $(INDEX_MD) ; \
+	  echo "=============================" >> $(INDEX_MD) ; \
+      echo "" >> $(INDEX_MD) ; \
+	  echo "Information for users and administrators." >> $(INDEX_MD) ; \
 	  echo "" >> $(INDEX_MD) ; \
-	  echo "---------------------------------------------------------------------------------------------------------------------------" >> $(INDEX_MD) ; \
+	  echo "* * *" >> $(INDEX_MD) ; \
 	  echo "" >> $(INDEX_MD) ; \
 	  for Md in $(INPUT_MDS) ; do \
 	    echo "1. [$$(head -n1 $$Md)]($${Md%.*}.html)" ; \
