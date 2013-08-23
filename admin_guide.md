@@ -1,111 +1,175 @@
-Euca2ools' how to - Admin's reference
-=====================================
+Administrators Guide
+====================
 
-The purpose of this "how to" is to give the basic tools for managing
-your cloud using the a small set of custom scripts and the Euca2ools,
-an open source implementation of EC2 Amazon's tools.
+This howto will provide you with basic information to create a
+sandboxed environment for a user willing to access the Private
+Cloud.
 
-For a more complete documentation see also:
+There is a single [Ruby](http://www.ruby-lang.org/) command line
+interface guiding you throughout the steps or doing them for you
+automatically. The script uses the
+[OpenNebula Cloud API](opennebula.org/doc/3.8/oca/ruby/).
 
-*   [This Guide](http://www.eucalyptus.com/docs/eucalyptus/3.3/console-guide/ "Eucaliptus User Guide")
-*   [These FAQs](https://aws.amazon.com/ec2/faqs/ "Amazon EC2 FAQ")
+From the user's perspective, the Cloud exposes an API compatible with
+Amazon EC2. It can be accessed using
+[Euca2ools](http://www.eucalyptus.com/download/euca2ools), an open
+source implementation of the
+[Amazon clients](https://aws.amazon.com/ec2/faqs/).
 
-Create a new user with the onevrouter-create.rb script
-------------------------------------------------------
 
-The script requires three mandatory parameters and one optional
-parameter. The basic idea is to assign a VRouter for each virtual
-private network assigned at every user. During the execution this
-script may produce (choosing the default --no-commit option) four
-templates, one for the quota management, one for the virtual router,
-one for a private network (where user machines will be connected), and
-the last for a public network. It has only one public (elastic) IP
-visible from the user side. The task automatically accomplished by the
-euca2ools is to map the unique public IP belonging to this VNet to a
-private VM's IP belonging to a private VNet.
+Rationale: user's sandbox
+-------------------------
+
+When we give access to one user to the private Cloud, we would like it
+to be "sandboxed", in the sense that as much as possible of the things
+that happen there will not negatively impact the whole
+infrastructure's behavior.
+
+A "private sandbox" is composed of a **OpenNebula user** and an
+isolated **Virtual Network**.
+
+### OpenNebula User
+
+An OpenNebula User with no administrative privileges has to be
+created. The user:
+
+*   belongs to one special **group** (called *ec2*)
+*   has a restrictive **quota** on the number of VMs and the amount of
+    resources she can use
+*   can only use those **images** whose specific permissions make them
+    *public*
+
+### Virtual Network
+
+In our private Cloud infrastructure a Virtual Network is isolated from
+the others by filtering out mac addresses using
+[ebtables](http://ebtables.sourceforge.net/) on the hypervisors.
+
+Network isolation is performed automatically by OpenNebula, which also
+deals gracefully by updating the rules when migrating VMs.
+
+An isolated Virtual Network is constituted by:
+
+*   a private set of class-C IP addresses, in the form *172.16.X.Y*:
+    each Virtual Network has its own *X*
+*   a Virtual Router, based on [OpenWrt](https://openwrt.org/),
+    providing Authoritative DHCP, DNS, NAT and port forwarding for the
+    private network
+
+The Virtual Router always has:
+
+*   a private address: *172.16.X.254*
+*   a public address, took from the pool named *VRouter-Pub*
+
+The public address is the entry point to the entire Virtual Network.
+
+Virtual Router has two access points (user is *root*, password is
+undisclosed):
+
+*   HTTPS access on port *60443*
+*   SSH access on port *60022*
+
+The Virtual Router comes with an Elastic IP functionality, that allows
+to use EC2-compatible APIs to bind the public IP address to one of the
+private VM instances dynamically.
+
+
+Using onevrouter-create
+-----------------------
+
+The `onevrouter-create.rb` script is capable of performing all the
+actions required to create a new user's environment. It should be used
+from the `oneadmin` user as it might need OpenNebula administrative
+privileges if you want to commit changes.
+
+Syntax:
+
+```{.sh}
+opevrouter-generator.rb \
+  --username clouduser --public-ip 193.205.66.216 \
+  --priv-ip 172.16.XXX.0/24 [--[no-]commit]
+```
+
+The above example will take all the necessary steps to create:
+
+*   an OpenNebula user named *clouduser*
+*   proper quota and group assignments for the aforementioned user
+*   a private Virtual Network *172.16.XXX.0* named *clouduser-Prv*,
+    visible to the user
+*   a public Virtual Network containing only one IP address, namely
+    *193.205.66.216*, called *clouduser-Pub*, invisible to the user
+    (it will be used transparently by the Elastic IP functionality)
+*   a Virtual Router having a private ip *172.16.XXX.254* and a public
+    ip *193.205.66.216*
+
+**Please note:** if you add the parameter `--commit`, the script will
+actually perform those steps and requires administrative privileges.
+If you intend to review settings before committing them, then you can
+run the script as-is, or with the `--no-commit` parameter: proper
+templates will be created, and instructions on what to do will be
+printed on screen.
+
+### Example of creating a user sandbox
 
 See how to use it below:
 
-    [oneadmin@one-master ~]$ onevrouter-generator.rb --username clouduser --public-ip 173.194.40.31 --priv-ip 172.16.123.0/255.255.255.0  
+```{.sh}
+$> onevrouter-generator.rb --username clouduser --public-ip 193.205.66.216 --priv-ip 172.16.216.0/24
+```
 
-    We are going to create a User with her own VRouter, Pub and Prv network with the following parameters:
+Creation is always safe and interactive. A summary output is presented
+to the user, who has to confirm the action by typing exactly the
+indicated words:
 
-    * User name        : clouduser
-    * Public IP        : 173.194.40.31
-    * Public Hostname  : mil02s06-in-f31.1e100.net
-    * Private IP range : 172.16.123.0..172.16.123.255
+```
+We are going to create a User with her own VRouter, Pub and Prv network with the following parameters:
 
-    NOTE: template files will be created for the network and VRouter, but no change will be committed to OpenNebula.
+* User name        : clouduser
+* Public IP        : 193.205.66.216
+* Public Hostname  : cloud-gw-216.to.infn.it
+* Private IP range : 172.16.216.0..172.16.216.255
 
-    Is this OK? Type "yes, it is": yes, it is
+NOTE: template files will be created for the network and VRouter, but no change will be committed to OpenNebula.
 
-In this way you create only the four templates, confirm typing
-literally *yes, it is* Please note that them will be created in the
-*present working directory*. The routine proceeds like this:
+Is this OK? Type "yes, it is":
+```
 
-    Generating template clouduser.onequota...ok
-    Generating template clouduser-VRouter.onevm...ok
-    Generating template clouduser-Prv.onevnet...ok
-    Generating template clouduser-Pub.onevnet...ok
-    
-    You should create the user with quota like this:
-    
-      oneuser create clouduser password
-      oneuser quota clouduser clouduser.onequota
-    
-    Then you should annotate User ID and Private VNet ID and add an ACL like this:
-    
-      oneacl create "#<UserID> NET/#<PrivateVNetID> USE+MANAGE"
-    
-    where you will substitute <UserID> and <PrivateVNetID>
+After giving proper confirmation, since we are not committing any
+change, templates will be created **in the current directory**. An
+output similar to the following is presented:
 
-See your templates here in this form:
+```
+Generating template clouduser.onequota...ok
+Generating template clouduser-VRouter.onevm...ok
+Generating template clouduser-Prv.onevnet...ok
+Generating template clouduser-Pub.onevnet...ok
 
-    [oneadmin@one-master ~]$ ls -l
-    totale 16
-    -rw-rw-r-- 1 oneadmin oneadmin   41 22 ago 17:52 clouduser.onequota
-    -rw-rw-r-- 1 oneadmin oneadmin  327 22 ago 17:52 clouduser-Prv.onevnet
-    -rw-rw-r-- 1 oneadmin oneadmin   82 22 ago 17:52 clouduser-Pub.onevnet
-    -rw-rw-r-- 1 oneadmin oneadmin 2199 22 ago 17:52 clouduser-VRouter.onevm
-    [oneadmin@one-master ~]$
+You should create the user with quota like this:
 
-If you are pleased with the work and believe it, you can directly
-commit the changes to OpenNebula that will automatically create
-everything is necessary for this configuration. Please, note that no
-templates will be written after this procedure.
+  oneuser create clouduser password
+  oneuser quota clouduser clouduser.onequota
 
-For example:
+Then you should annotate User ID and Private VNet ID and add an ACL like this:
 
-    [oneadmin@one-master ~]$ onevrouter-generator.rb -u clouduser --public-ip 193.205.66.219 --priv-ip 172.16.219.0/24
-    
-    We are going to create a User with her own VRouter, Pub and Prv network with the following parameters:
-    
-     * User name        : clouduser
-     * Public IP        : 193.205.66.219
-     * Public Hostname  : cloud-gw-219.to.infn.it
-     * Private IP range : 172.16.219.0..172.16.219.255
-    
-    NOTE: template files will be created for the network and VRouter, but no change will be committed to OpenNebula.
-    
-    Is this OK? Type "yes, it is": asd
-    Exiting
-    [oneadmin@one-master ~]$
-    [oneadmin@one-master ~]$
-    [oneadmin@one-master ~]$ onevrouter-generator.rb -u clouduser --public-ip 193.205.66.219 --priv-ip 172.16.219.0/24 --commit
-    
-    We are going to create a User with her own VRouter, Pub and Prv network with the following parameters:
-    
-     * User name        : clouduser
-     * Public IP        : 193.205.66.219
-     * Public Hostname  : cloud-gw-219.to.infn.it
-     * Private IP range : 172.16.219.0..172.16.219.255
-    
-    NOTE: changes will be committed directly to OpenNebula!
-    
-    Is this OK? Type "yes, it is": yes, it is
-    Creating user clouduser...ok (user ID: 40)
-    Adding user clouduser to group 106...ok
-    Adding a default user quota for clouduser...Creating private network clouduser-Pub...ok (vnet ID: 105)
-    Creating public network clouduser-Prv...ok (vnet ID: 106)
-    Creating ACLs...ok (acl ID: 127)
-    Instantiating VM clouduser-VRouter...ok (VM ID: 3383)
+  oneacl create "#<UserID> NET/#<PrivateVNetID> USE+MANAGE"
+
+where you will substitute <UserID> and <PrivateVNetID>
+```
+
+If you have chosen to commit changes directly to OpenNebula, after
+giving proper confirmation you'll find an output like the following:
+
+```
+Creating user clouduser...ok (user ID: 40)
+Adding user clouduser to group 106...ok
+Adding a default user quota for clouduser...Creating private network clouduser-Pub...ok (vnet ID: 105)
+Creating public network clouduser-Prv...ok (vnet ID: 106)
+Creating ACLs...ok (acl ID: 127)
+Instantiating VM clouduser-VRouter...ok (VM ID: 3383)
+```
+
+The output above represents a situation where everything went right.
+Please note that **no templates are created** when committing.
+
+**Also note** that the created user has password set to *password*,
+and should be immediately changed using the `oneuser` command.
