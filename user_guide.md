@@ -1,15 +1,16 @@
-Euca2ools' how to - Cloud-enter.sh
-==================================
+Euca2ools' howto - manage your private cloud with Euca2ools
+===========================================================
 
 The purpose of this "how to" is to give the basic tools for managing 
-your own set of virtual machines.
+your own set of virtual machines hosted on your private cloud 
+@Torino infrastructure.
 For a more complete documentation see also:
 
 *   [EC2 FAQs](https://aws.amazon.com/ec2/faqs/ "Amazon EC2 FAQ")
 
 *Please note that from this point forward, we assume that you have an
-active account on the cloud, If you are encountering problems setting
-them up please contact your system administrator.*
+active account on the cloud, If you are encountering problems in 
+setting them up please contact your system administrator.*
 
 How to use "cloud-enter.sh" from a *public login machine*
 ---------------------------------------------------------
@@ -49,9 +50,10 @@ Euca2ools' howto - VM managing
 "euca-create-keypairs"
 ----------------------
 
-In order to access by ssh you can create a keypair. Note that this 
-command require a -f \<keyfile_name.pem\> and a name that is to be 
-specified during the VM's creation (see below how to run an istance).
+In order to access through ssh you may need to create a keypair. Note
+that this command require a -f \<keyfile_name.pem\> and a name that 
+is to be specified during the VM's creation (see below how to run 
+an istance).
 
 ```{.sh}
 euca-create-keypairs -f <keyfile_name.pem> keyfile_name
@@ -59,7 +61,7 @@ euca-create-keypairs -f <keyfile_name.pem> keyfile_name
 
 "euca-describe-keypairs"
 ------------------------
-This lists all the keypairs you have created.
+This command lists all the keypairs you have created.
 
 "euca-describe-images" List the VM images available.
 ----------------------------------------------------
@@ -71,7 +73,7 @@ IMAGE	ami-00000304	cvm-2.7.1	    oneadmin	available	public		i386	machine
 IMAGE	ami-00000322	cvm-2.7.1-ami	oneadmin	available	public		i386	machine
 ```
 
-This will list all the images you can run. The unique ID 
+This lists all the images you can run. The unique ID 
 "ami-xxxxxxxx" is the parameter you need to specify
 in order to run the chosen image.
 
@@ -86,16 +88,16 @@ and eventually specify a contextualization script.
     Each template has different specification about the resources 
     your VM will have.
     Example: 
-
-1.   ```m1.small: ```  1 VCPU(s), 512 MB RAM, 0  GB DISK 
-2.   ```m1.medium: ``` 2 VCPU(s),   2 GB RAM, 20 GB DISK
-3.   ```m1.large: ```  4 VCPU(s),   8 GB RAM, 80 GB DISK 
-
+    
+    1.   ```m1.small: ```  1 VCPU(s), 512 MB RAM, 0  GB DISK 
+    2.   ```m1.medium: ``` 2 VCPU(s),   2 GB RAM, 20 GB DISK
+    3.   ```m1.large: ```  4 VCPU(s),   8 GB RAM, 80 GB DISK 
+    
 *   The second (optional) parameter you might need to specify is your
     contextualization script.
     This mainly depends on which technology you chose to implement.
 
-*   Optionally you can set the number of machines you would instantiate, with the parameter ```-n```
+*   You can (optional) set the number of machines you would instantiate, with the parameter ```-n```
 
 The command may result, for example:
 
@@ -108,15 +110,15 @@ See also: ```man euca-run-instances``` for more explanations.
 "euca-describe-instances" List your running instances.
 ------------------------------------------------------
 As you can easily figure out, this command allows you to list 
-__your__ running instances. Here you can see your instances ami-IDs,
-status, etc.
+__your__ running instances. Here you can see your instances' ami-IDs,
+statuses, etc.
 This is how does it work:
 
 ```{.sh}
 $> euca-describe-instances
 RESERVATION default mconcas default
 INSTANCE    i-kkkkkkkk  ami-xxxxxxxx    172.16.212.4    172.16.212.4    pending none    3374        m1.small    2013-08-14T14:41:38+02:00   default eki-EA801065    eri-1FEE1144        monitoring-disabled     172.16.212.4
-INSTANCE    i-zzzzzzzz  ami-yyyyyyyy    172.16.212.5    172.16.212.5    running none    3375        m1.medium    2013-08-14T14:41:39+02:00   default eki-EA801065    eri-1FEE1144        monitoring-disabled     172.16.212.5 
+INSTANCE    i-zzzzzzzz  ami-yyyyyyyy    172.16.212.5    172.16.212.5    running none    3375        m1.medium    2013-08-14T14:41:39+02:00   default eki-EA801065    eri-1FEE1144        monitoring-disabled     172.16.212.5
 ```
 
 Note that from here one can obtain your instance ID, which is 
@@ -205,7 +207,3 @@ To release an eIP use:
 $> euca-release-address 193.205.66.212
 ADDRESS 193.205.66.212
 ```
-    
-
-
-
