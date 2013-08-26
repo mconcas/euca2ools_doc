@@ -92,11 +92,12 @@ and eventually specify a contextualization script.
     contextualization script.
     This mainly depends on which technology you chose to implement.
 
+*   Optionally you can set the number of machines you would create, with the parameter ```-n```
 
 The command may result, for example:
 
 ```{.sh}
-$> euca-run-instances ami-xxxxxxxx -k keypair_name -f path/to/<userdata_file> -t m1.small
+$> euca-run-instances ami-xxxxxxxx -k keypair_name -n <number_of_instances> -f path/to/<userdata_file> -t m1.small
 ```
 
 See also: ```man euca-run-instances``` for more explanations.
