@@ -15,18 +15,21 @@ How to use "cloud-enter.sh" from a *public login machine*
 ---------------------------------------------------------
 
 Once logged in your account you can find ```cloud-enter.sh``` script
-in this path 
+in this path:
+
 
 ```/storage/alice/berzano/euca2ools/bin/cloud-enter```
 
 Or, for convenience, put an alias into your ~/.cshrc file.
 Type:
 
+
 ```{.sh}
 echo "alias cloud-enter \
 /storage/alice/berzano/euca2ools/bin/cloud-enter" \
 >> ~/.cshrc
 ```
+
 Then execute your ```.cshrc``` and type: 
 
     ~$> cloud-enter
@@ -84,15 +87,15 @@ and eventually specify a contextualization script.
     your VM will have.
     Example: 
 
-    1.   ```m1.small: ```  1 VCPU(s), 512 MB RAM, 0  GB DISK 
-    2.   ```m1.medium: ``` 2 VCPU(s),   2 GB RAM, 20 GB DISK
-    3.   ```m1.large: ```  4 VCPU(s),   8 GB RAM, 80 GB DISK 
+1.   ```m1.small: ```  1 VCPU(s), 512 MB RAM, 0  GB DISK 
+2.   ```m1.medium: ``` 2 VCPU(s),   2 GB RAM, 20 GB DISK
+3.   ```m1.large: ```  4 VCPU(s),   8 GB RAM, 80 GB DISK 
 
 *   The second (optional) parameter you might need to specify is your
     contextualization script.
     This mainly depends on which technology you chose to implement.
 
-*   Optionally you can set the number of machines you would create, with the parameter ```-n```
+*   Optionally you can set the number of machines you would instantiate, with the parameter ```-n```
 
 The command may result, for example:
 
