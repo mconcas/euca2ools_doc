@@ -10,8 +10,8 @@
 #   $> export PATH=$HOME/.cabal/bin:$PATH
 #
 
-PANDOC_OPTS := -s -S --toc --chapters --number-sections -f markdown -H css/github.css
-PANDOC_OPTS_INDEX := -s -S -f markdown -H css/github.css
+PANDOC_OPTS := -s -S --toc --chapters --number-sections -f markdown -c css/github.css --template=template.html
+PANDOC_OPTS_INDEX := -s -S -f markdown -c css/github.css
 
 INPUT_MDS := \
     admin_guide.md \
