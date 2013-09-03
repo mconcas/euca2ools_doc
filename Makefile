@@ -1,7 +1,7 @@
 #
 # Makefile for creating HTML out of Markdown for euca2ool's documentation.  
 #
-# Pandoc is used for the conversion. 
+# Pandoc is used for the conversion. Also recode is needed.
 #
 # Pandoc sample installation on OSX (using Homebrew):
 #
@@ -10,8 +10,17 @@
 #   $> export PATH=$HOME/.cabal/bin:$PATH
 #
 
-PANDOC_OPTS := -s -S --toc --chapters --number-sections -f markdown -c css/github.css --template=template.html
-PANDOC_OPTS_INDEX := -s -S -f markdown -c css/github.css
+CSS := github.css
+TEMPLATE := template.html
+TITLE_PREFIX := "cloud@torino"
+
+PANDOC_OPTS := -s -S --toc --chapters --number-sections -f markdown -c $(CSS) --template=$(TEMPLATE) --title-prefix=$(TITLE_PREFIX)
+PANDOC_OPTS_INDEX := -s -S -f markdown -c $(CSS) --template=$(TEMPLATE)
+
+# Workaround for shitty INFN Web Server overriding UTF-8
+#ICONV := iconv -f utf8 -t iso-8859-15//translit
+#ICONV := cat
+ICONV := recode -d ..html
 
 INPUT_MDS := \
     admin_guide.md \
@@ -37,13 +46,17 @@ idx:
 	  for Md in $(INPUT_MDS) ; do \
 	    echo "1. [$$(head -n1 $$Md | sed -e 's|^% *\(.*\)$$|\1|g')]($${Md%.*}.html)" ; \
 	  done >> $(INDEX_MD) )
-	@pandoc $(PANDOC_OPTS_INDEX) $(INDEX_MD) -o $(INDEX_HTML)
+	@pandoc $(PANDOC_OPTS_INDEX) $(INDEX_MD) | $(ICONV) > $(INDEX_HTML)
 
 %.html: %.md
 	@echo Generating HTML: $@
 	@(OFFSET=$$(for F in $(INPUT_MDS) ; do echo $$F ; done | grep -n $< | cut -d: -f1) ; \
-	  pandoc $(PANDOC_OPTS) --number-offset $$OFFSET $< -o $@)
+	  pandoc $(PANDOC_OPTS) --number-offset $$OFFSET $< | $(ICONV) > $@)
 
 clean:
 	@echo Cleaning up
 	@rm -f $(OUTPUT_HTML) $(INDEX_MD) $(INDEX_HTML)
+
+upload: all
+	@echo Uploading
+	@scp $(INDEX_HTML) $(CSS) $(OUTPUT_HTML) zoroastro.to.infn.it:priv-html/cloud/
