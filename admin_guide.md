@@ -1,4 +1,5 @@
 % Administrators Guide
+% [Dario Berzano](mailto:dario.berzano@cern.ch)
 
 This howto will provide you with basic information to create a
 sandboxed environment for a user willing to access the Private

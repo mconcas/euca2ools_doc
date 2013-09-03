@@ -1,4 +1,5 @@
 % Users Guide: how to use the Cloud
+% [Dario Berzano](mailto:dario.berzano@cern.ch)
 
 This document will briefly describe all the necessary steps and tools
 to manage your personal virtual infrastructure on your own.
