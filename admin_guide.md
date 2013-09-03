@@ -1,5 +1,4 @@
-Administrators Guide
-====================
+% Administrators Guide
 
 This howto will provide you with basic information to create a
 sandboxed environment for a user willing to access the Private

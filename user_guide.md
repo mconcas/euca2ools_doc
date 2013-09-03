@@ -1,5 +1,4 @@
-Users Guide: how to use the Cloud
-=================================
+% Users Guide: how to use the Cloud
 
 This document will briefly describe all the necessary steps and tools
 to manage your personal virtual infrastructure on your own.

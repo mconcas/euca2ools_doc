@@ -30,22 +30,18 @@ html: idx $(OUTPUT_HTML)
 
 idx:
 	@echo Generating HTML: index...
-	@(echo "Using the Cloud @ INFN Torino" > $(INDEX_MD) ; \
-	  echo "=============================" >> $(INDEX_MD) ; \
+	@(echo "% Using the Cloud @ INFN Torino" > $(INDEX_MD) ; \
       echo "" >> $(INDEX_MD) ; \
 	  echo "Information for users and administrators." >> $(INDEX_MD) ; \
 	  echo "" >> $(INDEX_MD) ; \
-	  echo "* * *" >> $(INDEX_MD) ; \
-	  echo "" >> $(INDEX_MD) ; \
 	  for Md in $(INPUT_MDS) ; do \
-	    echo "1. [$$(head -n1 $$Md)]($${Md%.*}.html)" ; \
+	    echo "1. [$$(head -n1 $$Md | sed -e 's|^% *\(.*\)$$|\1|g')]($${Md%.*}.html)" ; \
 	  done >> $(INDEX_MD) )
 	@pandoc $(PANDOC_OPTS_INDEX) $(INDEX_MD) -o $(INDEX_HTML)
 
 %.html: %.md
 	@echo Generating HTML: $@
 	@(OFFSET=$$(for F in $(INPUT_MDS) ; do echo $$F ; done | grep -n $< | cut -d: -f1) ; \
-	  let OFFSET-- ; \
 	  pandoc $(PANDOC_OPTS) --number-offset $$OFFSET $< -o $@)
 
 clean:
