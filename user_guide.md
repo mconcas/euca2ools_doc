@@ -129,11 +129,11 @@ when instantiating it.
 
 Lists all the created keypairs.
 
-    euca-create-keypair
+    euca-describe-keypair
 
 Will produce an output similar to:
 
-    KEYPAIR  TypeTheNameYouWant  18:c9:ed:71:30:0a:2c:fe:63:6f:64:35:ef:a7:e2:6f
+    KEYPAIR TypeTheNameYouWant  18:c9:ed:71:30:0a:2c:fe:63:6f:64:35:ef:a7:e2:6f
     KEYPAIR FooBar  18:92:c1:40:8e:d7:ee:e5:f8:75:d1:60:ab:bc:8b:d9
     KEYPAIR AnotherFancyName    83:a5:ec:a3:1b:20:ad:36:09:b4:1b:00:51:a5:03:73
 
