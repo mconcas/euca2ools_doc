@@ -235,3 +235,20 @@ To retrieve the logfiles:
     econe-server-ctl errlog
 
 The daemon ordinarily runs under the user `oneadmin`.
+
+
+Using the EC2 and OpenNebula interfaces
+---------------------------------------
+
+The OpenNebula administrative Unix account is preconfigured to operate
+on the cloud infrastructure using the `one*` commands.
+
+In case it's needed to use the cloud "as another user", or to test the
+EC2 interface, there is a command to invoke that prepares the
+environment for you:
+
+    cloud-enter
+
+You'll be prompted for your username and your password, and you'll be
+capable of using both the `one*` and the `euca-*` commands. See the
+User's Guide for more information on the euca2ools.
