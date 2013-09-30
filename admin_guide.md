@@ -149,7 +149,8 @@ You should create the user with quota like this:
   oneuser create clouduser password
   oneuser quota clouduser clouduser.onequota
 
-Then you should annotate User ID and Private VNet ID and add an ACL like this:
+Then you should annotate User ID and Private VNet ID and add an ACL
+like this:
 
   oneacl create "#<UserID> NET/#<PrivateVNetID> USE+MANAGE"
 
@@ -173,3 +174,64 @@ Please note that **no templates are created** when committing.
 
 **Also note** that the created user has password set to *password*,
 and should be immediately changed using the `oneuser` command.
+
+
+The OpenNebula EC2 interface daemon: econe
+------------------------------------------
+
+OpenNebula itself has an optional daemon that listens for EC2 requests
+and translates them to OpenNebula RPC requests. The daemon is called
+`econe-server`, and the OpenNebula website has
+[some documentation](http://opennebula.org/documentation:archives:rel3.8:ec2qcg)
+on it.
+
+The daemon also associates defined *flavors* to specific OpenNebula
+templates.
+
+A specially modified version of the EC2 daemon has been created, and
+it is available
+[on a special branch](https://github.com/dberzano/opennebula-torino/tree/one-3.8-ec2)
+of a GitHub repository which forks the
+[original one](http://dev.opennebula.org/).
+
+### List of relevant files
+
+All the files needed by the econe-server are under version control on
+the OpenNebula master host.
+
+*   `etc/econe.conf`: econe-server configuration file
+*   `etc/ec2query_templates/generic.erb.in`: generic Virtual Machine
+    template in the OpenNebula format. It is used to create a VM
+    definition out of an EC2 flavor. From this file, several VM
+    templates will be created by substituting the variables `@NAME@`,
+    `@MEMORY@` (in MB), `@DISK@` (in MB as well) and `@CPU@` (*i.e.*,
+    the number of CPUs.)
+*   `etc/ec2_query_templates/makeflavors.sh`: creates the real *erb*
+    templates out of some definitions defined in the same file
+*   `econe-associate`, `econe-disassociate`: scripts to associate and
+    disassociate an Elastic IP to a VM. How those scripts are called
+    is explained in the `econe.conf` file
+*   `econe-server-ctl`: script to start, stop and control the
+    `econe-server` daemon and set the environment to get it from a
+    custom folder, instead of using the system-wide installation
+
+### Starting and stopping the daemon
+
+To start the daemon:
+
+    econe-server-ctl start
+
+To stop it:
+
+    econe-server-ctl stop
+
+To check whether it's running, and the listening port:
+
+    econe-server-ctl status
+
+To retrieve the logfiles:
+
+    econe-server-ctl log
+    econe-server-ctl errlog
+
+The daemon ordinarily runs under the user `oneadmin`.
