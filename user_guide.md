@@ -205,11 +205,12 @@ list.
 
 #### List of possible flavors
 
-| Flavour   | CPUs | RAM    | Disk  |
-| --------- | ---- | ------ | ----- |
-| m1.small  | 1    | 512 MB | --    |
-| m1.medium | 2    | 2 GB   | 20 GB |
-| m1.large  | 4    | 8 GB   | 80 GB |
+| Flavour   | CPUs | RAM     | Disk   |
+| --------- | ---- | ------- | ------ |
+| m1.tiny   | 1    | 512 MB  | 3 GB   |
+| m1.small  | 1    | 2.6 GB  | 20 GB  |
+| m1.medium | 3    | 7.7 GB  | 60 GB  |
+| m1.large  | 6    | 15.4 GB | 120 GB |
 
 *   **CPUs:** is the number of virtual CPUs
 *   **Disk:** the so-called "ephemeral" disk, *i.e.* an empty disk
